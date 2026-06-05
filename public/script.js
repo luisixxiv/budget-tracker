@@ -14,7 +14,11 @@ const errorMessage = document.querySelector('#form-error');
 
 async function fetchTransactions() {
   const response = await fetch('/transactions');
-  return response.json();
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.error || 'Unable to load transactions.');
+  }
+  return result;
 }
 
 function formatPeso(value) {
@@ -33,6 +37,10 @@ function formatDate(dateString) {
 }
 
 function renderBudget(budget) {
+  if (!budget || !Array.isArray(budget.categories)) {
+    return;
+  }
+
   budgetTableBody.innerHTML = '';
   budget.categories.forEach((category) => {
     const row = document.createElement('tr');
@@ -54,7 +62,8 @@ function renderBudget(budget) {
 
 function renderTransactions(transactions) {
   transactionList.innerHTML = '';
-  const sorted = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const entries = Array.isArray(transactions) ? transactions : [];
+  const sorted = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
   transactionCount.textContent = `${sorted.length} ${sorted.length === 1 ? 'entry' : 'entries'}`;
 
   if (!sorted.length) {
@@ -79,13 +88,15 @@ function renderTransactions(transactions) {
 }
 
 async function loadData() {
+  errorMessage.textContent = '';
+
   try {
     const result = await fetchTransactions();
     renderBudget(result.budget);
     renderTransactions(result.transactions);
   } catch (error) {
     console.error(error);
-    errorMessage.textContent = 'Unable to load your budget data.';
+    errorMessage.textContent = error.message || 'Unable to load your budget data.';
   }
 }
 
