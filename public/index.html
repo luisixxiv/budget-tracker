@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Budget Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div>
+        <h1>Budget Tracker</h1>
+        <p>Log spending and watch each budget category update instantly.</p>
+      </div>
+      <div class="summary-card">
+        <span>Total Allocated</span>
+        <strong id="total-allocated">₱0</strong>
+      </div>
+    </header>
+
+    <main>
+      <section class="board board-left">
+        <h2>Budget Summary</h2>
+        <div class="table-wrapper">
+          <table id="budget-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Allocated</th>
+                <th>Spent</th>
+                <th>Remaining</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+              <tr class="total-row">
+                <td>Total</td>
+                <td id="total-allocated-footer">₱0</td>
+                <td id="total-spent">₱0</td>
+                <td id="total-remaining">₱0</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <section class="board board-right">
+        <div class="card card-form">
+          <h2>Log Spending</h2>
+          <form id="transaction-form">
+            <label>
+              Amount (₱)
+              <input type="number" id="amount" placeholder="1000" min="1" step="0.01" required />
+            </label>
+            <label>
+              Category
+              <select id="category" required>
+                <option value="Rent">Rent</option>
+                <option value="Meals">Meals</option>
+                <option value="Installment">Installment</option>
+                <option value="Expenses">Expenses</option>
+                <option value="Savings">Savings</option>
+              </select>
+            </label>
+            <label>
+              Description (optional)
+              <input type="text" id="description" maxlength="100" placeholder="Groceries, utilities, etc." />
+            </label>
+            <div class="form-actions">
+              <button type="submit">Add Transaction</button>
+              <button type="button" id="reset-button" class="secondary">Reset All</button>
+            </div>
+            <p id="form-error" class="error-message"></p>
+          </form>
+        </div>
+
+        <div class="card card-log">
+          <div class="log-header">
+            <h2>Transaction Log</h2>
+            <span id="transaction-count">0 entries</span>
+          </div>
+          <div class="log-list" id="transaction-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
